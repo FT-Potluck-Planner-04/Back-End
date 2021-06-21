@@ -12,6 +12,24 @@ function findBy(filter) {
       .where(filter)
       .first();
   }
+  //**************************Peter's**************************/
+  function update(id, changes) {
+    return db("users").where({id}).update(changes)
+}
+
+function remove(id) {
+    return db("users").where({id}).del()
+}
+function getInvited(id) {
+    return db.select("f.RSVP", "e.id", "e.title", "e.description", "e.month", "e.day", "e.year", "e.time_From", "e.time_To", "e.location")
+    .from("users as u")
+    .join("friends as f", "f.userID", "=", "u.id")
+    .join("events_friends as EF", "f.id", "=", "EF.userID")
+    .join("events as e" ,"e.id", "=", "EF.eventsID")
+    .where("f.userID", id)
+}
+
+//*****************************************************************/
 
 const add = async (user) => {
     await db('users')
@@ -23,5 +41,8 @@ const add = async (user) => {
 module.exports = {
     findById,
     add,
-    findBy
+    findBy,
+    update,
+    remove,
+    getInvited
 }
